@@ -26,7 +26,7 @@ def shuffle():
     random.shuffle(deck)
 
 def name(hand):
-    x=-1
+    x=0
     #y=int(0)
     for i in hand:
         card = hand[x]
@@ -44,20 +44,24 @@ def name(hand):
             n = str(num)
         if (suit == "c"):
             name = n + " of clubs"
+            print(name)
         elif (suit == "d"):
             name = n + " of diamonds"
+            print(name)
         elif (suit == "s"):
             name = n + " of spades"
+            print (name)
         else:
             name = n + " of hearts"
+            print (name)
         x+=1
-    print (name)
 
-def show_hand():
-    y=0
-    for i in user:
-        name(user[y])
-        y+=1
+
+#def show_hand():
+    #y=0
+    #for i in user:
+      #  name(user[y])
+       # y+=1
         #print ("h", h)
 
 def calc_total(hand):
@@ -71,23 +75,67 @@ def calc_total(hand):
         total += num
         x+=1
     print ("total: ",total)
+    return total
 
-
+def starting_draw(deck, user):
+    for y in range (2):
+        card = deck.pop(0)
+        user.append(card)
+        # print(user)
+        #card = name(user)
+    name(user)
+    total = calc_total(user)
+    return total
+def draw(deck, user):
+    card = deck.pop(0)
+    user.append(card)
+    name(user)
+    calc_total(user)
+    return total
 
 deck = []
 user = []
+dealer = []
 shuffle()
-print (deck)
-#user = draw(user)
-for y in range(4):
-    card = deck.pop(0)
-    user.append(card)
-    #print(user)
-    card = name(user)
-calc_total(user)
+#print (deck)
+starting_draw(deck,user)
+total = calc_total(user)
+dtotal=0
+winner = 0
+while (winner == 0):
+    choice = input("Would you like to draw another card? ")
+    while (total < 21 and choice == "yes"):
+        total=calc_total(user)
+        draw(deck, user)
+        if (total > 21):
+            print ("Your total is greater than 21")
+            print("Your total: ", total)
+            print("Dealer's total: ", dtotal)
+            winner = 1
+        choice = "no"
+        choice = input("Would you like to draw another card? ")
+    print("dealers deck: ")
+    while (winner == 0):
+        starting_draw(deck, dealer)
+        dtotal=calc_total(dealer)
+        while (dtotal <17):
+            draw (deck, dealer)
+            dtotal= calc_total(dealer)
+        if (dtotal > 21 or total>=dtotal):
+            print("Your total: ", total)
+            print("Dealer's total: ", dtotal)
+            winner = 2
+        else:
+            print ("The dealer had a better hand than you")
+            print("Your total: ", total)
+            print("Dealer's total: ", dtotal)
+            winner = 1
 
+if (winner == 1):
+    print("You lose")
+else:
+    print ("You win!")
 
-show_hand()
 
 #print (card)
 #print (deck)
